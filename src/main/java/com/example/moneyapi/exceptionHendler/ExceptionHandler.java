@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,6 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
     private MessageSource messageSource;
-
-
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
@@ -36,11 +35,24 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         List<Error> errors = List.of(new Error(userMessage, developmentMessage));
         return handleExceptionInternal(ex, errors, headers, status, request);
     }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<Error> errors = ErrorList(ex.getBindingResult());
         return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
+    }
+    @org.springframework.web.bind.annotation.ExceptionHandler(EmptyResultDataAccessException.class)
+    public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request ){
+        String userMessage = messageSource.getMessage("resource.not-found", null, LocaleContextHolder.getLocale());
+        String developmentMessage = ex.toString();
+        List<Error> errors = List.of(new Error(userMessage, developmentMessage));
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+    @org.springframework.web.bind.annotation.ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request){
+        String userMessage = messageSource.getMessage("resource.dont_have_permission_for_execute_operation", null, LocaleContextHolder.getLocale());
+        String developmentMessage = ex.toString();
+        List<Error> errors = List.of(new Error(userMessage, developmentMessage));
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     private List<Error> ErrorList(BindingResult bindingResult){
@@ -53,15 +65,6 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
             errors.add(new Error(userMessage, developmentMessage));
         }
         return errors;
-    }
-
-    @org.springframework.web.bind.annotation.ExceptionHandler(EmptyResultDataAccessException.class)
-
-    public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request ){
-        String userMessage = messageSource.getMessage("resource.not-found", null, LocaleContextHolder.getLocale());
-        String developmentMessage = ex.toString();
-        List<Error> errors = List.of(new Error(userMessage, developmentMessage));
-        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
     @Getter
     public static class Error {
