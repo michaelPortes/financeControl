@@ -2,20 +2,24 @@ package com.example.moneyapi.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
+import lombok.Getter;
+import lombok.Setter;
 @Entity
-@Table(name = "categories")
-@Setter
+@Table(name = "users")
 @Getter
-public class Categories {
+@Setter
+public class UsersModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @NotNull
-    @Size(min = 3, max = 20)
     private String name;
+
+    @NotNull
+    private Boolean active;
+
+    @Embedded
+    private AddressModel address;
 }

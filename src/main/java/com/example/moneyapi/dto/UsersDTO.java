@@ -1,7 +1,7 @@
 package com.example.moneyapi.dto;
 
-import com.example.moneyapi.model.Users;
+import com.example.moneyapi.model.UsersModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsersDTO extends JpaRepository<Users, Long> {
+public interface UsersDTO extends JpaRepository<UsersModel, Long> {
 }

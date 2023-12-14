@@ -1,7 +1,7 @@
 package com.example.moneyapi.services;
 
 import com.example.moneyapi.dto.UsersDTO;
-import com.example.moneyapi.model.Users;
+import com.example.moneyapi.model.UsersModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,20 +15,20 @@ public class UsersServices {
     @Autowired
     private UsersDTO usersDTO;
 
-    public Users updateUser(Long id, Users user){
-        Users saveUser = searchUserById(id);
+    public UsersModel updateUser(Long id, UsersModel user){
+        UsersModel saveUser = searchUserById(id);
         BeanUtils.copyProperties(user, saveUser, "id");
         return usersDTO.save(user);
     }
 
     public void partialUpdateUser(Long id, Boolean active){
-        Users saveUser = searchUserById(id);
+        UsersModel saveUser = searchUserById(id);
         saveUser.setActive(active);
         usersDTO.save(saveUser);
     }
 
-    private Users searchUserById(Long id){
-        Optional<Users> saveUser = usersDTO.findById(id);
+    private UsersModel searchUserById(Long id){
+        Optional<UsersModel> saveUser = usersDTO.findById(id);
         if(saveUser.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
