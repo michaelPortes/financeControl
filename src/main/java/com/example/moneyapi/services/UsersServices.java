@@ -27,10 +27,10 @@ public class UsersServices {
         usersDTO.save(saveUser);
     }
 
-    private UsersModel searchUserById(Long id){
+    public UsersModel searchUserById(Long id){
         Optional<UsersModel> saveUser = usersDTO.findById(id);
         if(saveUser.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+                throw new EmptyResultDataAccessException(1);
         }
         return saveUser.get();
     }

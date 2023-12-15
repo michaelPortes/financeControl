@@ -3,6 +3,7 @@ package com.example.moneyapi.controller;
 import com.example.moneyapi.dto.LaunchDTO;
 import com.example.moneyapi.event.UriServices;
 import com.example.moneyapi.model.LaunchModel;
+import com.example.moneyapi.services.LaunchServices;
 import jakarta.persistence.Lob;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.callback.LanguageCallback;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +22,9 @@ import java.util.Optional;
 public class LaunchController {
     @Autowired
     private LaunchDTO launchDTO;
+
+    @Autowired
+    private LaunchServices launchServices;
 
     @Autowired
     private ApplicationEventPublisher publisher;
@@ -37,7 +42,7 @@ public class LaunchController {
 
     @PostMapping
     public ResponseEntity<LaunchModel> createLaunch(@Valid @RequestBody LaunchModel launch, HttpServletResponse response){
-        LaunchModel saveLaunch = launchDTO.save(launch);
+        LaunchModel saveLaunch = launchServices.verifyValidUser(launch);
         publisher.publishEvent(new UriServices(this, response, saveLaunch.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(saveLaunch);
     }

@@ -22,8 +22,8 @@ public class LaunchModel {
     @NotNull
     private String description;
 
-    @Column(name = "date_maturity")
     @NotNull
+    @Column(name = "date_maturity")
     private LocalDate dateMaturity;
 
     @Column(name = "date_payment")
@@ -34,17 +34,17 @@ public class LaunchModel {
 
     private String observation;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private LaunchType type;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoriesModel categoriesId;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "users_id")
     private UsersModel userId;
-
-
-
 }
