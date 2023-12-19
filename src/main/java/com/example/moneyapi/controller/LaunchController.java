@@ -46,4 +46,10 @@ public class LaunchController {
         publisher.publishEvent(new UriServices(this, response, saveLaunch.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(saveLaunch);
     }
+
+    @DeleteMapping( "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLaunch(@PathVariable Long id){
+        launchDTO.deleteById(id);
+    }
 }
