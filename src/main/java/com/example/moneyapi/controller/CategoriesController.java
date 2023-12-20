@@ -23,7 +23,6 @@ public class CategoriesController {
 
     @Autowired
     private ApplicationEventPublisher publisher;
-
     @GetMapping
     public ResponseEntity<?> listing(){
         List<CategoriesModel> categories = categoriesDTO.findAll();
