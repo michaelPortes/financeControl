@@ -42,4 +42,10 @@ public class CategoriesController {
         return categories.isPresent() ? ResponseEntity.ok(categories.get()) : ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCategories(@PathVariable Long id){
+        categoriesDTO.deleteById(id);
+    }
+
 }

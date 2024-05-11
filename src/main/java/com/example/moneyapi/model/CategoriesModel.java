@@ -18,4 +18,6 @@ public class CategoriesModel {
     @NotNull
     @Size(min = 3, max = 20)
     private String name;
+
+    private String description;
 }
