@@ -1,5 +1,7 @@
 package com.example.moneyapi.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -24,9 +26,13 @@ public class LaunchModel {
 
     @NotNull
     @Column(name = "date_maturity")
+    @JsonProperty("date_maturity")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dateMaturity;
 
     @Column(name = "date_payment")
+    @JsonProperty("date_payment")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate datePayment;
 
     @NotNull
